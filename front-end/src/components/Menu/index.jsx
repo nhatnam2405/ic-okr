@@ -1,6 +1,6 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
-import {React, useState, useEffect } from 'react';
+import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons'
+import { Menu } from 'antd'
+import { React, useState, useEffect } from 'react'
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -9,7 +9,7 @@ function getItem(label, key, icon, children, type) {
     children,
     label,
     type,
-  };
+  }
 }
 
 const items = [
@@ -28,12 +28,12 @@ const items = [
     getItem('Option 11', '11'),
     getItem('Option 12', '12'),
   ]),
-];
+]
 
 const App = () => {
   const onClick = (e) => {
-    console.log('click ', e);
-  };
+    console.log('click ', e)
+  }
 
   return (
     <Menu
@@ -46,7 +46,7 @@ const App = () => {
       mode="inline"
       items={items}
     />
-  );
-};
+  )
+}
 
-export default App;
+export default App
