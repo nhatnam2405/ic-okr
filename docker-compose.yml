@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  back-end:
+    restart: always
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile.dev
+    container_name: back-end
+    volumes:
+      - ./back-end:/app
+      - /app/node_modules
+    ports:
+      - 5001:5001
+    depends_on:
+      - mongo
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      MONGO_URI: mongodb://genos:ZhV0FwWwL9CbgvESkm@mongo:27017/
+    networks:
+      - network-connect
+
+  mongo:
+    image: mongo
+    restart: always
+    container_name: library_mern_mongo
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: genos
+      MONGO_INITDB_ROOT_PASSWORD: ZhV0FwWwL9CbgvESkm
+    volumes:
+      - ./mongodb-data:/data/db
+    networks:
+      - network-connect
+  
+  front-end:
+    stdin_open: true
+    restart: always
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile.dev
+    container_name: front-end
+    environment:
+      NODE_ENV: ${NODE_ENV}
+    volumes:
+      - ./front-end:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    depends_on:
+      - back-end
+    networks:
+      - network-connect
+
+  nginx:
+    restart: always
+    depends_on:
+      - back-end
+      - front-end
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs
+    #  ports:
+    #    - 80:80
+    #    - 443:443
+    networks:
+      - network-connect
+
+networks:
+  network-connect:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+    driver: local
